@@ -7,6 +7,7 @@ class Car:
             clean_mark: int,
             brand: str
     ) -> None:
+        """Here we are initializing the car class."""
         self.comfort_class = comfort_class
         self.clean_mark = clean_mark
         self.brand = brand
@@ -20,6 +21,11 @@ class CarWashStation:
             average_rating: float,
             count_of_ratings: int
     ) -> None:
+        """
+        Here we are initializing the car wash station class.
+        Take in mind that distance_from_city can't be 0,
+        it's minimum 1.0 and maximum 10.0.
+        """
         self.distance_from_city_center = distance_from_city_center
         self.clean_power = clean_power
         self.average_rating = average_rating
@@ -31,9 +37,12 @@ class CarWashStation:
         To calculate income, we're using 'calculate_washing_price' method.
         """
         income = 0.0
+        if self.clean_power <= 0:
+            return income
         for car in cars:
             if car.clean_mark < self.clean_power:
-                income += self.wash_single_car(car)
+                income += self.calculate_washing_price(car)
+                self.wash_single_car(car)
 
         return round(income, 1)
 
@@ -48,18 +57,12 @@ class CarWashStation:
         income = car.comfort_class * power_mark * rate_distance
         return round(income, 1)
 
-    def wash_single_car(self, car: Car) -> float:
+    def wash_single_car(self, car: Car) -> None:
         """
-        Here we're calculating income from one car.
-        To calculate income, we're using 'calculate_washing_price' method.
+        Here we're change clean_mark
         """
-        if self.clean_power <= 0:
-            return 0.0
         if car.clean_mark < self.clean_power:
-            income = self.calculate_washing_price(car)
             car.clean_mark = self.clean_power
-            return round(income, 1)
-        return 0.0
 
     def rate_service(self, rate: float) -> float:
         """
